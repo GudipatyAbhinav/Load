@@ -10,7 +10,7 @@ from keras.optimizers import SGD
 import math
 from sklearn.metrics import mean_squared_error
 import streamlit as st
-import pickle5 as pickle
+import pickle
 import base64
 
 # Some functions to help out with
@@ -58,7 +58,7 @@ def click_button_train():
 #     }
 #     </style>
 #     """, unsafe_allow_html=True)
-st.title("Load Forecasting Using GRU (Initial Training)")
+st.title("Load Forecasting Using LSTM(1st training)")
 
 df = st.file_uploader("Upload file", type={"csv"})
 if df is not None:
@@ -83,7 +83,7 @@ if df is not None:
 
     # Main functions
     df=df[start:end]
-    prev = st.slider('Past lookup days (less than ending and starting dates) : ', key=2, min_value=1, max_value=100, value=1, step=1)
+    prev = st.slider('Past lookup days:', key=2, min_value=1, max_value=100, value=1, step=1)
     training_set = np.array(df)
     training_set=np.reshape(training_set,(training_set.shape[0],1))
     sc = MinMaxScaler(feature_range=(0,1))
@@ -112,20 +112,20 @@ if df is not None:
     BATCH_SIZE = st.slider('Batch Size : ', min_value=1, max_value=100, value=1, step=1)
 
     model = Sequential()
-    model.add(GRU(64, activation='tanh',return_sequences=True, input_shape=(60, 1)))
-    model.add(GRU(units=50, return_sequences=False))
+    model.add(LSTM(64, activation='tanh',return_sequences=True, input_shape=(100, 1)))
+    model.add(LSTM(units=50, return_sequences=False))
     model.add(Dropout(0.2))
     model.add(Dense(1))
     #opt = keras.optimizers.Adam(learning_rate=0.01)
     model.compile(optimizer='adam', loss='mean_squared_error')
     if st.button("Train the Model", type="secondary", use_container_width=False):
         model.fit(X_train,Y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, shuffle=False)
-        st.success("Model Trained Successfully", icon="🔥")
+        st.success("Model Trained Successfully")
 
     def download_model(model):
         output_model = pickle.dumps(model)
         b64 = base64.b64encode(output_model).decode()
-        href = f'<a href="data:file/output_model;base64,{b64}" download="GRU_model.h5">Download Trained Model .h5 File</a>'
+        href = f'<a href="data:file/output_model;base64,{b64}" download="LSTM_model.h5">Download Trained Model .h5 File</a>'
         st.markdown(href, unsafe_allow_html=True)
 
 

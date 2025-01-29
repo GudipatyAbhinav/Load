@@ -11,7 +11,7 @@ from keras.optimizers import SGD
 import math
 from sklearn.metrics import mean_squared_error
 import streamlit as st
-import pickle5 as pickle
+import pickle
 import base64
 import tensorflow as tf
 import os
@@ -36,20 +36,12 @@ def return_rmse(test,predicted):
     print("The root mean squared error is {}.".format(rmse))
 
 
-st.title("Load Forecasting Using GRU (Re-training)")
+st.title("Load Forecasting Using LSTM(2nd training)")
 
 df = st.file_uploader("Upload file", type={"csv"})
 file = st.file_uploader('Model file .h5 model', type='.h5')
 if df and file is not None:
     df = pd.read_csv(df, index_col=[0], parse_dates=[0])
-    # myzipfile = zipfile.ZipFile(file)
-    # with tempfile.TemporaryDirectory() as tmp_dir:
-    #     myzipfile.extractall(tmp_dir)
-    #     root_folder = myzipfile.namelist()[0] # e.g. "model.h5py"
-    #     model_dir = os.path.join(tmp_dir, root_folder)
-    #     #st.info(f'trying to load model from tmp dir {model_dir}...')
-    #     model = tf.keras.models.load_model(model_dir)
-    # model=pickle.load(open(pwd(),'rb'))
     model_bytes = file.read()
     model = pickle.load(BytesIO(model_bytes))
     st.write("Shape : ",df.shape)
@@ -59,7 +51,7 @@ if df and file is not None:
     values = st.slider(
     "Select a range for training values",
     2015, df.shape[0],(0,df.shape[0]//2))
-    # st.write("Values:", values)
+    
     start=values[0]
     end=values[1]
     fig=plt.figure(figsize=(16,6))
@@ -105,7 +97,7 @@ if df and file is not None:
     def download_model(model):
         output_model = pickle.dumps(model)
         b64 = base64.b64encode(output_model).decode()
-        href = f'<a href="data:file/output_model;base64,{b64}" download="GRU_updated_model.h5">Download Updated Model .h5 File</a>'
+        href = f'<a href="data:file/output_model;base64,{b64}" download="LSTM_updated_model.h5">Download Updated Model .h5 File</a>'
         st.markdown(href, unsafe_allow_html=True)
 
 

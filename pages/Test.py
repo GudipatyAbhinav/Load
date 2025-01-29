@@ -10,7 +10,7 @@ from keras.optimizers import SGD
 import math
 from sklearn.metrics import mean_squared_error
 import streamlit as st
-import pickle5 as pickle
+import pickle
 import base64
 from io import BytesIO
 
@@ -53,7 +53,7 @@ def return_rmse(test,predicted):
 #     }
 #     </style>
 #     """, unsafe_allow_html=True)
-st.title("Load Forecasting Using GRU (Testing)")
+st.title("Load Forecasting Using LSTM (Testing)")
 
 df = st.file_uploader("Upload file", type={"csv"})
 file = st.file_uploader('Model (.h5) file', type='.h5')
