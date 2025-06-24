@@ -1,14 +1,16 @@
 @echo off
 
-:: Check if virtual environment exists and activate it
-if exist venv (
-    call venv\Scripts\activate
-)
 
-:: Install dependencies
-pip install -r requirements.txt
 
-:: Run Streamlit app
+pip install matplotlib
+pip install pandas
+pip install streamlit
+pip install tensorflow
+pip install keras
+pip install scikit-learn
+pip install pickle4
+
 streamlit run App.py
+
 
 pause
